@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Configurations>Debug;Release;Development</Configurations>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
