@@ -3,6 +3,30 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+#logo {
+    background-color: rgba(255,255,255,0.2);
+    margin: 16px;
+    height: 32px;
+    color: antiquewhite;
+    text-align: center;
+    font-size: 1.0vw;
+    min-width: 32px;
+}
+
+#login-header {
+    display: flex;
+    flex-direction: row-reverse;
+    color: antiquewhite;
+    padding-right: 10px;
+    font-size: 100%;
+    width: 100%;
+}
+
+@media only screen AND (max-width: 600px) {
+    #hello-message {
+        display: none;
+    }
+}
 
 h1:focus {
     outline: none;

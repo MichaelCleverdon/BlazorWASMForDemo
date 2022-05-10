@@ -1,0 +1,120 @@
+﻿@page "/updateFood/{name}"
+@using BlazorWASMForDemo.Objects
+@using BlazorWASMForDemo.Services
+@attribute [Authorize]
+@inject NavigationManager _nav
+@inject IFoodApi _foodApi
+@inject AuthenticationStateProvider claimsProvider
+@inject ModalService _modalService
+@inject MessageService _messageService
+
+<PageHeader Class="site-page-header" Title="Update a Food Item" OnBack="NavigateToFoodTable" />
+@if (!string.IsNullOrWhiteSpace(Error))
+{
+    <Alert Type="@AlertType.Error" Message="@Error" Closable OnClose="ClearError" />
+}
+@if (!string.IsNullOrWhiteSpace(Success))
+{
+    <Alert Type="@AlertType.Success" Message="@Success" Closable OnClose="ClearSuccess" />
+}
+@if(Food != null){
+    if (Food == new FoodObject())
+    {
+        <p>We were unable to find your FoodItem. Please forward this issue to HelpDesk</p>
+    }
+    else
+    {
+        <FoodForm OnSubmit="OnSubmit" Food="@Food" ShowDelete="true" OnDelete="ConfirmDialog"/>
+    }
+}
+else{
+    <p>Loading Food Item...</p>
+}
+
+
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+    public FoodObject Food { get; set; }
+    public string Error { get; set; }
+    public string Success { get; set; }
+    private void ClearError() => Error = "";
+    private void ClearSuccess() => Success = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var username = claimsProvider.GetAuthenticationStateAsync().Result?.User.Identity.Name;
+        if (string.IsNullOrWhiteSpace(username))
+        {
+
+        }
+        else
+        {
+            Food = await _foodApi.GetFoodObject(Name);
+        }
+    }
+
+    private void NavigateToFoodTable()
+    {
+        _nav.NavigateTo("/foodTable");
+    }
+
+    public async void OnSubmit()
+    {
+        Food.Username = claimsProvider.GetAuthenticationStateAsync().Result?.User.Identity.Name;
+        if (string.IsNullOrWhiteSpace(Food.Username))
+        {
+            Error = "Something went wrong when trying to save the Food Item. Please log out and log back in before trying again.";
+        }
+        else
+        {
+            Console.WriteLine($"Name: {Food.Name}. Quantity: {Food.Quantity}. Username: {Food.Username}");
+            try
+            {
+                await _foodApi.CreateOrUpdateFoodObject(Food);
+                _messageService.Success("Your item was successfully Updated");
+            }
+            catch(Exception ex)
+            {
+                Error = ex.Message;
+                StateHasChanged();
+            }
+        }
+    }
+
+    public async void ConfirmDialog()
+    {
+        var confirm = await _modalService.ConfirmAsync(new ConfirmOptions()
+        {
+            Content = "Are you sure you want to delete this item? This operation is permanent",
+        });
+        if (confirm)
+        {
+            DeleteItem();
+        }
+    }
+    public async void DeleteItem()
+    {
+        Food.Username = claimsProvider.GetAuthenticationStateAsync().Result?.User.Identity.Name;
+        if (string.IsNullOrWhiteSpace(Food.Username))
+        {
+            Error = "Something went wrong when trying to delete the Food Item. Please log out and log back in before trying again.";
+        }
+        else
+        {
+            Console.WriteLine($"Name: {Food.Name}. Quantity: {Food.Quantity}. Username: {Food.Username}");
+            try
+            {
+                await _foodApi.DeleteFoodObject(Food);
+                await _messageService.Success("Item Successfully Deleted");
+                NavigateToFoodTable();
+            }
+            catch(Exception ex)
+            {
+                Error = ex.Message;
+                StateHasChanged();
+            }
+        }
+    }
+}

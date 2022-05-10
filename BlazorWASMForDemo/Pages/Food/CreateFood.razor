@@ -1,0 +1,51 @@
+﻿@using BlazorWASMForDemo.Objects
+@using BlazorWASMForDemo.Services
+@page "/createFood"
+@attribute [Authorize]
+@inject NavigationManager _nav
+@inject IFoodApi _foodApi
+@inject AuthenticationStateProvider claimsProvider
+@inject MessageService _messageService
+
+<PageHeader Class="site-page-header" Title="Create a Food Item" OnBack="NavigateToFoodTable" />
+@if (!string.IsNullOrWhiteSpace(Error))
+{
+    <Alert Type="AlertType.Error" Message="@Error" Closable OnClose="ClearError" />
+}
+<FoodForm Food="@Food" OnSubmit="Submit"/>
+
+@code {
+    protected FoodObject Food { get; set; } = new FoodObject();
+    private string Error { get; set; } = "";
+    private void ClearError() => Error = "";
+
+    private void NavigateToFoodTable()
+    {
+        _nav.NavigateTo("/foodTable");
+    }
+
+    public async void Submit()
+    {
+        Food.Username = claimsProvider.GetAuthenticationStateAsync().Result?.User.Identity.Name;
+        if (string.IsNullOrWhiteSpace(Food.Username))
+        {
+            Error = "Something went wrong when trying to save the Food Item. Please log out and log back in before trying again.";
+        }
+        else
+        {
+            Console.WriteLine($"Name: {Food.Name}. Quantity: {Food.Quantity}. Username: {Food.Username}");
+            try
+            {
+                await _foodApi.CreateOrUpdateFoodObject(Food);
+                await _messageService.Success("Item Successfully Created!");
+                NavigateToFoodTable();
+            }
+            catch(Exception ex)
+            {
+                Error = ex.Message;
+                StateHasChanged();
+            }           
+        }
+    }
+
+}

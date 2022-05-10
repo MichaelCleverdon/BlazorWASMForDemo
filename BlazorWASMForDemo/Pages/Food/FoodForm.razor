@@ -1,0 +1,33 @@
+﻿@using BlazorWASMForDemo.Objects
+
+<Form 
+    OnFinish="@(()=> {_hasSubmitted = true; OnSubmit.InvokeAsync();})"
+    Model="@Food"
+    Style="padding-left: 15px; max-width: max(40%, 400px);"
+    >
+    <FormItem Label="Food Item Name">
+        <Input @bind-Value="@context.Name" Placeholder="Food Item Name"/>
+    </FormItem>
+    <FormItem Label="Quantity">
+        <AntDesign.InputNumber TValue="uint" @bind-Value="@context.Quantity" Placeholder="Quantity" />
+    </FormItem>
+    <FormItem>
+        <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Enter" Loading="_hasSubmitted" HtmlType="submit" >Submit</Button>
+        @if (ShowDelete)
+        {
+            <Button Type="@ButtonType.Default" Danger OnClick="@(() => OnDelete.InvokeAsync())">Delete Food Item</Button>
+        }
+    </FormItem>
+</Form>
+
+@code {
+    public bool _hasSubmitted { get; set; } = false;
+    [Parameter]
+    public bool ShowDelete { get; set; } = false;
+    [Parameter, EditorRequired]
+    public FoodObject Food { get; set; }
+    [Parameter]
+    public EventCallback<Action> OnSubmit { get; set; }
+    [Parameter]
+    public EventCallback<Action> OnDelete { get; set; }
+}

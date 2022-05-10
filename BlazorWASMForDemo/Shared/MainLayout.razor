@@ -1,18 +1,18 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
+<Layout Style="height: 100vh; overflow: auto;">
+    <Sider Breakpoint="@BreakpointType.Lg" Theme="@SiderTheme.Dark" CollapsedWidth="54">
         <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+    </Sider>
+    <Layout>
+        <Header Style="padding: 0;">
+            <div class="bg-gradient" id="login-header">
+                <LoginDisplay />
+            </div>
+        </Header>
+        <Content Style="margin: 16px 16px 0; background-color: white; overflow: auto; padding-left: 16px; padding-right: 16px;">
             @Body
-        </article>
-    </main>
-</div>
+        </Content>
+        <Footer Style="text-align: center;">&copy;2022 Blazor Demo</Footer>
+    </Layout>
+</Layout>

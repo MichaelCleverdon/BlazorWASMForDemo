@@ -1,0 +1,93 @@
+﻿@page "/foodTable"
+@using AntDesign.TableModels
+@using BlazorWASMForDemo.Objects
+@using BlazorWASMForDemo.Services
+@using System.Web
+@attribute [Authorize]
+@inject NavigationManager _nav
+@inject IFoodApi _api
+@inject AuthenticationStateProvider claimsProvider
+
+<PageHeader Title="Food Entries">
+    <PageHeaderExtra>
+        <Button Type="@ButtonType.Primary" OnClick="NavigateToCreateItem">Add New Item</Button>
+    </PageHeaderExtra>
+</PageHeader>
+
+@if(foodObjects == null){
+    <p>Loading data...</p>
+} else {
+    if (!string.IsNullOrWhiteSpace(Error))
+    {
+        <Alert Type="@AlertType.Error" Message="@Error" Closable OnClose="ClearError"/>
+    }
+    <Table @ref="table"
+            DataSource="@foodObjects"
+            TItem="FoodObject"
+            @bind-PageIndex="_pageIndex"
+            @bind-PageSize="_pageSize"
+            OnRow="ViewItemDetails"
+    >
+        <Column DataIndex="@nameof(FoodObject.Name)" TData="string" />
+        <Column DataIndex="@nameof(FoodObject.Quantity)" TData="int" />
+        <Column DataIndex="@nameof(FoodObject.Username)" TData="string" />
+    </Table>
+@*
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th style="text-align: right;">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var food in foodObjects!)
+            {
+                <tr>
+                    <td>@food.Username</td>
+                    <td>@food.Name</td>
+                    <td style="text-align: right;">@food.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+}
+
+@code {
+    private ITable table;
+    private string Error { get; set; } = "";
+    private void ClearError() => Error = "";
+    private List<FoodObject>? foodObjects;
+    private int _pageIndex = 1;
+    private int _pageSize = 5;
+    private int _total { get => foodObjects?.Count ?? 0; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await claimsProvider.GetAuthenticationStateAsync();
+        var user = authState?.User;
+
+        //The user's have to be authenticated for the call to work properly. Which is why the @attribute [Authorize] is in place
+        try{
+            foodObjects = await _api.GetAllFoodObjects();
+        }
+        catch(Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    public void NavigateToCreateItem()
+    {
+        _nav.NavigateTo("/createFood");
+    }
+
+    Dictionary<string, object> ViewItemDetails(RowData<FoodObject> row) => new()
+        {
+            ["onclick"] = (()=>
+            {
+                _nav.NavigateTo($"/updateFood/{Uri.EscapeDataString(row.Data.Name)}");
+            })
+        };
+}

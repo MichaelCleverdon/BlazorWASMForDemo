@@ -2,7 +2,8 @@
 {
     public class FoodObject
     {
-        public FoodObject(string username, string name, int quantity = 0)
+        public FoodObject() { }
+        public FoodObject(string username, string name, uint quantity = 0)
         {
             Username = username;
             Name = name;
@@ -11,6 +12,6 @@
 
         public string Username { get; set; }
         public string Name { get; set; }
-        public int Quantity { get; set; }
+        public uint Quantity { get; set; }
     }
 }

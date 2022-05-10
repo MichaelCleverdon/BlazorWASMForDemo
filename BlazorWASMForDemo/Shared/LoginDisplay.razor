@@ -6,8 +6,16 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity?.Name!
-        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+        <Space Size="@("16")">
+            <SpaceItem>
+                <div class="text-break">
+                    <span id="hello-message">Hello, </span>@context.User.Identity?.Name!
+                </div>
+            </SpaceItem> 
+            <SpaceItem>
+                <Button Class="nav-link btn btn-link" OnClick="BeginSignOut" Shape="@ButtonShape.Round" Style="padding-left: 7px; padding-right: 7px; background-color: #0050b3; border-color: #0050b3; color: white;">Log out</Button>
+            </SpaceItem>
+        </Space>
     </Authorized>
     <NotAuthorized>
         <a href="authentication/login">Log in</a>
