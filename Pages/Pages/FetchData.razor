@@ -1,9 +1,7 @@
 ﻿@page "/fetchdata"
-
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IHttpClientFactory httpFactory
-@inject AuthenticationStateProvider claimsProvider
-@attribute [Authorize]
 
 <PageTitle>Weather forecast</PageTitle>
 

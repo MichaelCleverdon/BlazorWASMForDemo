@@ -1,7 +1,18 @@
 ﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly">
+    <Router AppAssembly="@typeof(App).Assembly" 
+        >
+    @*AdditionalAssemblies="new[] {
+    //typeof(RazorComponentLibrary.Pages.Authentication).Assembly,
+    typeof(RazorComponentLibrary.Pages.Counter).Assembly,
+    typeof(RazorComponentLibrary.Pages.FetchData).Assembly,
+    typeof(RazorComponentLibrary.Pages.Index).Assembly,
+    typeof(RazorComponentLibrary.Pages.Food.CreateFood).Assembly,
+    //typeof(RazorComponentLibrary.Pages.Food.FoodForm).Assembly,
+    typeof(RazorComponentLibrary.Pages.Food.FoodTable).Assembly,
+    typeof(RazorComponentLibrary.Pages.Food.UpdateFood).Assembly,
+        }"*@
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(RazorComponentLibrary.Shared.MainLayout)">
                 <Authorizing>
                     <p>Trying to log you in... Please wait one moment...</p>
                 </Authorizing>
@@ -20,7 +31,7 @@
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
+            <LayoutView Layout="@typeof(RazorComponentLibrary.Shared.MainLayout)">
                 <p role="alert">Sorry, there's nothing at this address.</p>
             </LayoutView>
         </NotFound>

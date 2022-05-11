@@ -1,9 +1,10 @@
 using BlazorWASMForDemo;
-using BlazorWASMForDemo.Services;
+using RazorComponentLibrary.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using RazorComponentLibrary;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -14,7 +15,7 @@ builder.Services.AddScoped<CustomAuthorizationMessageHandler>();
 builder.Services.AddHttpClient("Default", httpClient =>
 {
     httpClient.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-}).AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
+});//.AddHttpMessageHandler<CustomAuthorizationMessageHandler>();
 builder.Services.AddAntDesign();
 builder.Services.AddOidcAuthentication(options =>
 {

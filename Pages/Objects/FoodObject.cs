@@ -1,4 +1,4 @@
-﻿namespace BlazorWASMForDemo.Objects
+﻿namespace RazorComponentLibrary.Objects
 {
     public class FoodObject
     {

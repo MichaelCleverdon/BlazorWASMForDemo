@@ -1,6 +1,6 @@
-﻿using BlazorWASMForDemo.Objects;
+﻿using RazorComponentLibrary.Objects;
 
-namespace BlazorWASMForDemo.Services
+namespace RazorComponentLibrary.Services
 {
     public interface IFoodApi
     {

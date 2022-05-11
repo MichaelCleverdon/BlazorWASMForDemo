@@ -1,9 +1,9 @@
-﻿using BlazorWASMForDemo.Objects;
+﻿using RazorComponentLibrary.Objects;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Web;
 
-namespace BlazorWASMForDemo.Services
+namespace RazorComponentLibrary.Services
 {
     public class FoodApi : IFoodApi
     {

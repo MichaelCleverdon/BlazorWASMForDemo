@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 
-namespace BlazorWASMForDemo.Objects
+namespace RazorComponentLibrary.Objects
 {
     public class FoodItemForm
     {
