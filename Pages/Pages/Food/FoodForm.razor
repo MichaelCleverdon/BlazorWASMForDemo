@@ -1,7 +1,7 @@
 ﻿@using RazorComponentLibrary.Objects
 
 <Form 
-    OnFinish="@(()=> {_hasSubmitted = true; OnSubmit.InvokeAsync();})"
+    OnFinish="@(async ()=> {_hasSubmitted = true; await OnSubmit.InvokeAsync(); _hasSubmitted = false;})"
     Model="@Food"
     Style="padding-left: 15px; max-width: max(40%, 400px);"
     >

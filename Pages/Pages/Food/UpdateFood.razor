@@ -37,6 +37,7 @@ else{
     [Parameter]
     public string Name { get; set; }
     public FoodObject Food { get; set; }
+    public FoodObject OriginalFood { get; set; }
     public string Error { get; set; }
     public string Success { get; set; }
     private void ClearError() => Error = "";
@@ -51,7 +52,9 @@ else{
         }
         else
         {
-            Food = await _foodApi.GetFoodObject(Name);
+            OriginalFood = await _foodApi.GetFoodObject(Name);
+            //Required to split the references and prevent the OriginalFood from updating when the Food object updates
+            Food = new FoodObject(OriginalFood.Username, OriginalFood.Name, OriginalFood.Quantity);
         }
     }
 
@@ -72,6 +75,10 @@ else{
             Console.WriteLine($"Name: {Food.Name}. Quantity: {Food.Quantity}. Username: {Food.Username}");
             try
             {
+                //Due to Dyanmo having the name as a sort key, this will create the illusion of a proper update
+                if(OriginalFood.Name != Food.Name){
+                    await _foodApi.DeleteFoodObject(OriginalFood);
+                }
                 await _foodApi.CreateOrUpdateFoodObject(Food);
                 _messageService.Success("Your item was successfully Updated");
             }
@@ -106,7 +113,7 @@ else{
             Console.WriteLine($"Name: {Food.Name}. Quantity: {Food.Quantity}. Username: {Food.Username}");
             try
             {
-                await _foodApi.DeleteFoodObject(Food);
+                await _foodApi.DeleteFoodObject(OriginalFood);
                 await _messageService.Success("Item Successfully Deleted");
                 NavigateToFoodTable();
             }

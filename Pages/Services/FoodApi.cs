@@ -16,24 +16,6 @@ namespace RazorComponentLibrary.Services
             _httpClient.Timeout = TimeSpan.FromSeconds(60);
             _httpClient.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
         }
-        private readonly List<FoodObject> tempList = new()
-        {
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "8oz Can of Corn", 5),
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "12oz Can of Tomato w/ Green Chiles", 8),
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "8oz Can of Black Beans", 50),
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "8oz Can of Pinto Beans", 9),
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "10oz Can of Green Beans", 15),
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "1lb Bag of Flour", 12),
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "Ramen Packets - Chicken Flavor", 16),
-            new FoodObject("michaelcleverdon@u.boisestate.edu", "Funfetti Birthday Cake Mix", 1),
-            new FoodObject("kevin", "Funfetti Birthday Cake Mix", 1),
-            new FoodObject("kevin", "Funfetti Birthday Cake Mix", 1),
-            new FoodObject("kevin", "Funfetti Birthday Cake Mix", 1),
-            new FoodObject("kevin", "Funfetti Birthday Cake Mix", 1),
-            new FoodObject("kevin", "Funfetti Birthday Cake Mix", 1),
-            new FoodObject("kevin", "Funfetti Birthday Cake Mix", 1),
-            new FoodObject("kevin", "Funfetti Birthday Cake Mix", 1),
-        };
         public async Task<List<FoodObject>> GetAllFoodObjects()
         {
             List<FoodObject> foodObjects = new List<FoodObject>();
@@ -84,7 +66,7 @@ namespace RazorComponentLibrary.Services
 
         public async Task<FoodObject> DeleteFoodObject(FoodObject foodObject)
         {
-            var response = await _httpClient.PostAsJsonAsync("/DeleteFood", foodObject);
+            var response = await _httpClient.PostAsJsonAsync("DeleteFoodItem", foodObject);
             if (response.IsSuccessStatusCode)
             {
                 return await JsonSerializer.DeserializeAsync<FoodObject>(await response?.Content.ReadAsStreamAsync(), _serializerOptions);

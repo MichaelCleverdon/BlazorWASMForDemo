@@ -9,6 +9,9 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<EmccTotalMemory>16777216</EmccTotalMemory>
+	</PropertyGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
